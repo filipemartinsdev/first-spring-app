@@ -7,13 +7,13 @@ Projeto de estudo utilizando Spring Framework.
 Uma API REST para executar CRUD de usuários.
 
 ## Tecnologias
-- Java 17
-- Spring Framework 3.5.7
-- Lombok
-- Hibernate (ORM)
-- H2 Database
-- Apache Maven 
-- Git
+
+[![My Skills](https://skillicons.dev/icons?i=java,spring,maven,git)](https://skillicons.dev)
+
+![](https://img.shields.io/badge/Lombok-1.18.42-blue)
+![](https://img.shields.io/badge/Hibernate-6.2.7-blue)
+![](https://img.shields.io/badge/H2_Database-2.3.232-blue)
+![](https://img.shields.io/badge/Bcrypt-0.10.2-blue)
 
 ## Requisitos
 - Java 17+
