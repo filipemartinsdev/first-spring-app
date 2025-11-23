@@ -21,7 +21,7 @@ public class UsersController {
     @GetMapping
     public ResponseEntity<List<User>> usersGet(){
         return ResponseEntity
-                .status(201).
+                .status(200).
                 contentType(MediaType.APPLICATION_JSON).
                 body(userService.getAll());
     }
