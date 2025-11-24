@@ -21,11 +21,11 @@ public class UserService {
         return userRepository.saveAll(userList);
     }
 
-    public List<User> getAll(){
+    public List<User> findAll(){
         return userRepository.findAll();
     }
 
-    public User get(long id){
+    public User find(long id){
         return userRepository.getReferenceById(id);
     }
 
@@ -33,7 +33,15 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User update(User user){
-        return userRepository.save(user);
+//    public User update(User user){
+//        return userRepository.save(user);
+//    }
+
+    public User findByName(String name){
+        return userRepository.findByName(name);
+    }
+
+    public boolean existsById(long id){
+        return userRepository.existsById(id);
     }
 }

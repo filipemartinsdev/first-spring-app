@@ -5,6 +5,12 @@ import lombok.AllArgsConstructor;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "user_table")
@@ -12,11 +18,22 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class User {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public User(){}
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="name", unique = true, nullable = false)
     private String name;
+
+    @Column(name="email", unique = true, nullable = false)
     private String email;
 
-    public User(){}
+    @Column(name="password_hash", nullable = false)
+    private String password;
+
+    @Column(name="created_at")
+    @CreationTimestamp
+    private LocalDateTime timestamp;
 }

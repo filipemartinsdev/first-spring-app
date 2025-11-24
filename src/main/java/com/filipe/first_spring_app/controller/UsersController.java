@@ -1,8 +1,8 @@
 package com.filipe.first_spring_app.controller;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.filipe.first_spring_app.model.User;
 import com.filipe.first_spring_app.service.UserService;
-import org.apache.coyote.Response;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,19 +23,21 @@ public class UsersController {
         return ResponseEntity
                 .status(200).
                 contentType(MediaType.APPLICATION_JSON).
-                body(userService.getAll());
+                body(userService.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> usersGet(@PathVariable("id") long id){
-        User user = userService.get(id);
-        if (user==null){
-            return ResponseEntity.notFound().build();
+        if (!userService.existsById(id)){
+            return ResponseEntity
+                    .status(404)
+                    .build();
         }
+
         return ResponseEntity
                 .status(200)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(user);
+                .body(userService.find(id));
     }
 
     @DeleteMapping("/delete/{id}")
@@ -48,8 +50,16 @@ public class UsersController {
 
     @PostMapping("/create")
     public ResponseEntity<User> usersCreatePost(@RequestBody User user){
-        User created = userService.create(user);
+        User currentUser = userService.findByName(user.getName());
+        if (currentUser == null){
+            return ResponseEntity
+                    .status(400)
+                    .build();
+        }
 
+        String hashedPassword = BCrypt.withDefaults().hashToString(12, user.getPassword().toCharArray());
+        user.setPassword(hashedPassword);
+        User created = userService.create(user);
         return ResponseEntity
                 .status(201)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -58,7 +68,13 @@ public class UsersController {
 
     @PostMapping("/createAll")
     public ResponseEntity<List<User>> usersCreateAllPost(@RequestBody List<User> users){
-        List<User> createdList = userService.createAll(users);
+        List<User> hashedUsers = users.stream()
+                .map(x -> {
+                    x.setPassword(BCrypt.withDefaults().hashToString(12, x.getPassword().toCharArray()));
+                    return x;
+                })
+                .toList();
+        List<User> createdList = userService.createAll(hashedUsers);
         return ResponseEntity
                 .status(201)
                 .contentType(MediaType.APPLICATION_JSON)
